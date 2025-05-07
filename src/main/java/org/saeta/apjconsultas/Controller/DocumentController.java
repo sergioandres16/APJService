@@ -49,12 +49,15 @@ public class DocumentController {
 
         try {
             periodo = periodo.replace("-", " ");
-            System.out.println(periodo);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseDocumentBase64("Error en parámetro periodo", new ArrayList()));
         }
 
         ArrayList<DocumentBase64> listDocumentoBase64 = this.documentService.obtenerDocumentoBase64(listaGrupos, dni, periodo);
+
+        if (listDocumentoBase64.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.OK).body(new ResponseDocumentBase64("Documento pendiente por enviar", new ArrayList<>()));
+        }
 
         ResponseDocumentBase64 responseDocumentBase64 = new ResponseDocumentBase64("Solicitud Exitosa", listDocumentoBase64);
         return ResponseEntity.status(HttpStatus.OK).body(responseDocumentBase64);
@@ -81,12 +84,15 @@ public class DocumentController {
 
         try {
             periodo = periodo.replace("-", " ");
-            System.out.println(periodo);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseDocumentURL("Error en parámetro periodo", new ArrayList()));
         }
 
         ArrayList<DocumentURL> listDocumentoURL = this.documentService.obtenerDocumentosURL(listaGrupos, dni, periodo);
+
+        if (listDocumentoURL.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.OK).body(new ResponseDocumentURL("Documento pendiente por enviar", new ArrayList<>()));
+        }
 
         ResponseDocumentURL responseDocumentURL = new ResponseDocumentURL("Solicitud Exitosa", listDocumentoURL);
         return ResponseEntity.status(HttpStatus.OK).body(responseDocumentURL);
